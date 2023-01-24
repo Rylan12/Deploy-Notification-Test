@@ -6,17 +6,20 @@ jobs:
     name: Generate homebrew/cask data, pages and API
     runs-on: ubuntu-latest
     steps:
-      - run: echo "cask"
+      - name: Generate cask
+        run: echo "cask"
   generate-core:
     name: Generate homebrew/core data, pages and API
     runs-on: ubunty-latest
     steps:
-      - run: echo "core"
+      - name: Generate core
+        run: echo "core"
   generate-analytics:
     name: Generate analytics data
     runs-on: ubuntu-latest
     steps:
-      - run: echo "analytics"
+      - name: Generate analytics
+        run: echo "analytics"
   generate-samples:
     name: Generate API samples
     runs-on: ubuntu-latest
@@ -48,9 +51,9 @@ jobs:
     steps:
       - name: Detect existing deploy failure issue
         run: |
-          EXISTING_ISSUE=$(gh issue list --author BrewTestBot --label 'deploy failure' | awk '{print $1}')
+          EXISTING_ISSUE=$(gh issue list --author Rylan12 --label 'deploy failure' | awk '{print $1}')
           echo "EXISTING_ISSUE=$EXISTING_ISSUE" >> $GITHUB_ENV
-          echo "WORKFLOW_URL=https://github.com/Homebrew/formulae.brew.sh/actions/runs/$RUN_ID" >> $GITHUB_ENV
+          echo "WORKFLOW_URL=https://github.com/Rylan12/Deploy-Notification-Test/actions/runs/$RUN_ID" >> $GITHUB_ENV
         env:
           RUN_ID: ${{ github.run_id }}
       - name: Report deploy failure

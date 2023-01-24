@@ -7,6 +7,11 @@ on:
         required: true
         default: false
         type: boolean
+      core:
+        description: Fail generate core job
+        required: true
+        default: false
+        type: boolean
       build:
         description: Fail build job
         required: true
@@ -33,8 +38,17 @@ jobs:
       - name: Output
         if: ${{ inputs.cask }}
         run: foo
+  generate-core:
+    name: Generate homebrew/core data, pages and API
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate core
+        run: echo "core"
+      - name: Output
+        if: ${{ inputs.core }}
+        run: foo
   build:
-    needs: generate-cask
+    needs: [generate-cask, generate-core]
     runs-on: ubuntu-latest
     steps:
       - name: Generate site
@@ -67,8 +81,9 @@ jobs:
           echo "EXISTING_ISSUE=$EXISTING_ISSUE" >> $GITHUB_ENV
           echo "WORKFLOW_URL=https://github.com/Rylan12/Deploy-Notification-Test/actions/runs/$RUN_ID" >> $GITHUB_ENV
         env:
+          SUCCESS: ${{ needs.deploy.result == 'success' }}
           RUN_ID: ${{ github.run_id }}
-      - name: Report deploy failure
+      - name: Report deploy status if necessary
         if: ${{ needs.deploy.result == 'failure' }}
         run: |
           ISSUE_TITLE="Site deploy failed"

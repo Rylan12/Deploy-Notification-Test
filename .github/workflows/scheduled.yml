@@ -83,7 +83,7 @@ jobs:
         run: |
           COMMENT_BODY="The most recent site deploy attempt succeeded.\n\n[Click here to view the logs of the successful run]($WORKFLOW_URL)"
           if [ -n "$EXISTING_ISSUE" ]; then
-            gh issue comment "$EXISTING_ISSUE" --repo "$REPO" --body "$(echo -e "COMMENT_BODY")"
+            gh issue comment "$EXISTING_ISSUE" --repo "$REPO" --body "$(echo -e "$COMMENT_BODY")"
             gh issue close "$EXISTING_ISSUE" --repo "$REPO"
           fi
   algolia_recrawl:

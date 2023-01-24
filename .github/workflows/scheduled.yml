@@ -27,11 +27,12 @@ jobs:
     if: ${{ always() }}
     env:
       GH_TOKEN: ${{ secrets.HOMEBREW_GITHUB_PUBLIC_REPO_TOKEN }}
+      REPO: ${{ github.repository }}
     runs-on: ubuntu-latest
     steps:
       - name: Detect existing deploy failure issue
         run: |
-          EXISTING_ISSUE=$(gh issue list --author Rylan12 --label 'deploy failure' | awk '{print $1}')
+          EXISTING_ISSUE=$(gh issue list --repo "$REPO" --author Rylan12 --label 'deploy failure' | awk '{print $1}')
           echo "EXISTING_ISSUE=$EXISTING_ISSUE" >> $GITHUB_ENV
           echo "WORKFLOW_URL=https://github.com/Rylan12/Deploy-Notification-Test/actions/runs/$RUN_ID" >> $GITHUB_ENV
         env:
@@ -42,17 +43,17 @@ jobs:
           ISSUE_TITLE="Site deploy failed"
           ISSUE_BODY="The most recent site deploy attempt failed.\n\n[Click here to view the logs of the most recent failed run]($WORKFLOW_URL)"
           if [ -n "$EXISTING_ISSUE" ]; then
-            gh issue edit "$EXISTING_ISSUE" --body "$ISSUE_BODY"
+            gh issue edit "$EXISTING_ISSUE" --repo "$REPO" --body "$ISSUE_BODY"
           else
-            gh issue create --title "$ISSUE_TITLE" --body "$ISSUE_BODY" --label "deploy failure"
+            gh issue create --repo "$REPO" --title "$ISSUE_TITLE" --body "$ISSUE_BODY" --label "deploy failure"
           fi
       - name: Report deploy success
         if: ${{ needs.deploy.result == 'success' }}
         run: |
           COMMENT_BODY="The most recent site deploy attempt succeeded.\n\n[Click here to view the logs of the successful run]($WORKFLOW_URL)"
           if [ -n "$EXISTING_ISSUE" ]; then
-            gh issue comment "$EXISTING_ISSUE" --body "$COMMENT_BODY"
-            gh issue close "$EXISTING_ISSUE"
+            gh issue comment "$EXISTING_ISSUE" --repo "$REPO" --body "$COMMENT_BODY"
+            gh issue close "$EXISTING_ISSUE" --repo "$REPO"
           fi
   algolia_recrawl:
     needs: deploy

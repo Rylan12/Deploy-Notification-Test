@@ -68,7 +68,7 @@ jobs:
         run: foo
   report-failure:
     name: Report deploy failure
-    needs: deploy
+    needs: [generate-cask, generate-core, build, deploy]
     if: ${{ always() }}
     env:
       GH_TOKEN: ${{ secrets.HOMEBREW_GITHUB_PUBLIC_REPO_TOKEN }}
@@ -84,7 +84,7 @@ jobs:
           SUCCESS: ${{ needs.deploy.result == 'success' }}
           RUN_ID: ${{ github.run_id }}
       - name: Report deploy status if necessary
-        if: ${{ needs.deploy.result == 'failure' }}
+        if: ${{ contains(needs.*.result, 'failure') }}
         run: |
           ISSUE_TITLE="Site deploy failed"
           ISSUE_BODY="The most recent site deploy attempt failed.\n\n[Click here to view the logs of the most recent failed run]($WORKFLOW_URL)"

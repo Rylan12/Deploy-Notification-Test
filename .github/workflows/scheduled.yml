@@ -8,26 +8,8 @@ jobs:
     steps:
       - name: Generate cask
         run: echo "cask"
-  generate-core:
-    name: Generate homebrew/core data, pages and API
-    runs-on: ubunty-latest
-    steps:
-      - name: Generate core
-        run: echo "core"
-  generate-analytics:
-    name: Generate analytics data
-    runs-on: ubuntu-latest
-    steps:
-      - name: Generate analytics
-        run: echo "analytics"
-  generate-samples:
-    name: Generate API samples
-    runs-on: ubuntu-latest
-    steps:
-      - name: Generate samples
-        run: echo "samples"
   build:
-    needs: [generate-cask, generate-core, generate-analytics, generate-samples]
+    needs: generate-cask
     runs-on: ubuntu-latest
     steps:
       - name: Generate site

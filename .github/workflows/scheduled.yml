@@ -24,7 +24,7 @@ jobs:
   report-failure:
     name: Report deploy failure
     needs: deploy
-    if: ${{ always() && needs.deploy.result == 'failure' }}
+    if: ${{ always() }}
     env:
       GITHUB_TOKEN: ${{ secrets.HOMEBREW_GITHUB_PUBLIC_REPO_TOKEN }}
     runs-on: ubuntu-latest

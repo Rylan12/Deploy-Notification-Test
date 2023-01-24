@@ -72,16 +72,11 @@ jobs:
         if: ${{ needs.deploy.result == 'failure' }}
         run: |
           ISSUE_TITLE="Site deploy failed"
-          # echo "The most recent site deploy attempt failed." > body_file
-          # echo "" >> body_file
-          # echo "[Click here to view the logs of the most recent failed run]($WORKFLOW_URL)" >> body_file
           ISSUE_BODY="The most recent site deploy attempt failed.\n\n[Click here to view the logs of the most recent failed run]($WORKFLOW_URL)"
-          echo -e "test\n\nfoo"
-          echo -e "$ISSUE_BODY"
           if [ -n "$EXISTING_ISSUE" ]; then
-            gh issue edit "$EXISTING_ISSUE" --repo "$REPO" --body-file - <(echo -e "$ISSUE_BODY")
+            gh issue edit "$EXISTING_ISSUE" --repo "$REPO" --body "$(echo -e "$ISSUE_BODY")"
           else
-            gh issue create --title "$ISSUE_TITLE" --repo "$REPO" --label "deploy failure" --body-file - <(echo -e "$ISSUE_BODY")
+            gh issue create --title "$ISSUE_TITLE" --repo "$REPO" --label "deploy failure" --body "$(echo -e "$ISSUE_BODY")"
           fi
       - name: Report deploy success
         if: ${{ needs.deploy.result == 'success' }}

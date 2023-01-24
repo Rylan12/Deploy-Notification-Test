@@ -16,7 +16,7 @@ jobs:
         run: echo "generated"
   deploy:
     needs: build
-    if: ${{ github.ref_name == 'master' }}
+    if: ${{ github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages

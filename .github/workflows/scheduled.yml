@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
-        run: echo "deployed"
+        run: foo
   report-failure:
     name: Report deploy failure
     needs: deploy

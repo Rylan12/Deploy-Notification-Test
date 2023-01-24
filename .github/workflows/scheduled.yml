@@ -3,24 +3,24 @@ on:
   workflow_dispatch:
     inputs:
       cask:
-        description: Generate cask job result
+        description: Fail generate cask job
         required: true
-        default: true
+        default: false
         type: boolean
       build:
-        description: Build job result
+        description: Fail build job
         required: true
-        default: true
+        default: false
         type: boolean
       deploy:
-        description: Deploy job result
+        description: Fail deploy job
         required: true
-        default: true
+        default: false
         type: boolean
       algolia:
-        description: Algolia job result
+        description: Fail Algolia job
         required: true
-        default: true
+        default: false
         type: boolean
 
 jobs:

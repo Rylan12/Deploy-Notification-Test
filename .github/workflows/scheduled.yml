@@ -41,18 +41,18 @@ jobs:
         if: ${{ needs.deploy.result == 'failure' }}
         run: |
           ISSUE_TITLE="Site deploy failed"
-          ISSUE_BODY="The most recent site deploy attempt failed.\n\n[Click here to view the logs of the most recent failed run]($WORKFLOW_URL)"
+          echo "The most recent site deploy attempt failed.\n\n[Click here to view the logs of the most recent failed run]($WORKFLOW_URL)" > body_file
           if [ -n "$EXISTING_ISSUE" ]; then
-            gh issue edit "$EXISTING_ISSUE" --repo "$REPO" --body "$ISSUE_BODY"
+            gh issue edit "$EXISTING_ISSUE" --body-file body_file
           else
-            gh issue create --repo "$REPO" --title "$ISSUE_TITLE" --body "$ISSUE_BODY" --label "deploy failure"
+            gh issue create --title "$ISSUE_TITLE" --body-file body_file --label "deploy failure"
           fi
       - name: Report deploy success
         if: ${{ needs.deploy.result == 'success' }}
         run: |
-          COMMENT_BODY="The most recent site deploy attempt succeeded.\n\n[Click here to view the logs of the successful run]($WORKFLOW_URL)"
+          echo "The most recent site deploy attempt succeeded.\n\n[Click here to view the logs of the successful run]($WORKFLOW_URL)" > body_file
           if [ -n "$EXISTING_ISSUE" ]; then
-            gh issue comment "$EXISTING_ISSUE" --repo "$REPO" --body "$COMMENT_BODY"
+            gh issue comment "$EXISTING_ISSUE" --body-file body_file
             gh issue close "$EXISTING_ISSUE" --repo "$REPO"
           fi
   algolia_recrawl:

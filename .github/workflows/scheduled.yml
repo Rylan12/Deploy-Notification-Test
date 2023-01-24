@@ -26,7 +26,7 @@ jobs:
     needs: deploy
     if: ${{ always() }}
     env:
-      GITHUB_TOKEN: ${{ secrets.HOMEBREW_GITHUB_PUBLIC_REPO_TOKEN }}
+      GH_TOKEN: ${{ secrets.HOMEBREW_GITHUB_PUBLIC_REPO_TOKEN }}
     runs-on: ubuntu-latest
     steps:
       - name: Detect existing deploy failure issue

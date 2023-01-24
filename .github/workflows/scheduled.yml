@@ -1,5 +1,27 @@
 name: Scheduled regeneration
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      cask:
+        description: Generate cask job result
+        required: true
+        default: true
+        type: boolean
+      build:
+        description: Build job result
+        required: true
+        default: true
+        type: boolean
+      deploy:
+        description: Deploy job result
+        required: true
+        default: true
+        type: boolean
+      algolia:
+        description: Algolia job result
+        required: true
+        default: true
+        type: boolean
 
 jobs:
   generate-cask:
@@ -8,12 +30,18 @@ jobs:
     steps:
       - name: Generate cask
         run: echo "cask"
+      - name: Output
+        if: ${{ inputs.cask }}
+        run: foo
   build:
     needs: generate-cask
     runs-on: ubuntu-latest
     steps:
       - name: Generate site
         run: echo "generated"
+      - name: Output
+        if: ${{ inputs.build }}
+        run: foo
   deploy:
     needs: build
     if: ${{ github.ref_name == 'main' }}
@@ -21,6 +49,9 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         run: echo "deploy"
+      - name: Output
+        if: ${{ inputs.deploy }}
+        run: foo
   report-failure:
     name: Report deploy failure
     needs: deploy
@@ -62,3 +93,6 @@ jobs:
     steps:
       - name: Algolia crawler creation and recrawl
         run: echo "algolia"
+      - name: Output
+        if: ${{ inputs.algolia }}
+        run: foo

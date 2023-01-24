@@ -79,9 +79,9 @@ jobs:
           echo -e "test\n\nfoo"
           echo -e "$ISSUE_BODY"
           if [ -n "$EXISTING_ISSUE" ]; then
-            gh issue edit "$EXISTING_ISSUE" --repo "$REPO" --body "$ISSUE_BODY"
+            gh issue edit "$EXISTING_ISSUE" --repo "$REPO" --body-file - <$(echo -e "$ISSUE_BODY"
           else
-            gh issue create --title "$ISSUE_TITLE" --repo "$REPO" --body "$ISSUE_BODY" --label "deploy failure"
+            gh issue create --title "$ISSUE_TITLE" --repo "$REPO" --label "deploy failure" --body-file - <$(echo -e "$ISSUE_BODY")
           fi
       - name: Report deploy success
         if: ${{ needs.deploy.result == 'success' }}

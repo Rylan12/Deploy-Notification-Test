@@ -69,7 +69,7 @@ jobs:
   report-failure:
     name: Report deploy failure
     needs: [generate-cask, generate-core, build, deploy]
-    if: ${{ always() }}
+    if: ${{ =github.ref_name == 'main' }}
     env:
       GH_TOKEN: ${{ secrets.HOMEBREW_GITHUB_PUBLIC_REPO_TOKEN }}
       REPO: ${{ github.repository }}

@@ -69,7 +69,7 @@ jobs:
   report-failure:
     name: Report deploy failure
     needs: [generate-cask, generate-core, build, deploy]
-    if: ${{ =github.ref_name == 'main' }}
+    if: ${{ github.ref_name == 'main' }}
     env:
       GH_TOKEN: ${{ secrets.HOMEBREW_GITHUB_PUBLIC_REPO_TOKEN }}
       REPO: ${{ github.repository }}
@@ -77,7 +77,7 @@ jobs:
     steps:
       - name: Detect existing deploy failure issue
         run: |
-          EXISTING_ISSUE=$(gh issue list --repo "$REPO" --author Rylan12 --label 'deploy failure' | awk '{print $1}')
+          EXISTING_ISSUE=$(gh issue list --repo "$REPO" --author Rylan12 --label 'deploy failure' | awk '{print $1}' | head -n 1)
           echo "EXISTING_ISSUE=$EXISTING_ISSUE" >> $GITHUB_ENV
           echo "WORKFLOW_URL=https://github.com/Rylan12/Deploy-Notification-Test/actions/runs/$RUN_ID" >> $GITHUB_ENV
         env:
